@@ -1,0 +1,80 @@
+---
+kind: Service
+apiVersion: v1
+
+metadata:
+  name: elasticsearch
+
+spec:
+  selector:
+    app: elasticsearch
+
+  # headless service
+  type: ClusterIP
+  clusterIP: None
+
+  ports:
+    - name: api
+      port: 9200
+      targetPort: 9200
+    - name: cluster
+      port: 9300
+      targetPort: 9300
+
+---
+
+kind: Deployment
+apiVersion: extensions/v1beta1
+
+metadata:
+  name: elasticsearch
+
+spec:
+  replicas: 2
+  revisionHistoryLimit: 3
+
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+
+    spec:
+      volumes:
+        - name: storage
+          emptyDir: {}
+
+      containers:
+
+        - name: elasticsearch
+          image: docker.elastic.co/elasticsearch/elasticsearch:5.6.3
+
+          env:
+            - name: cluster.name
+              value: "es-cluster"
+            - name: ES_JAVA_OPTS
+              value: "-Xms512m -Xmx512m"
+            - name: discovery.zen.ping.unicast.hosts
+              value: "elasticsearch"
+            - name: xpack.security.enabled
+              value: "false"
+
+          ports:
+            - name: api
+              containerPort: 9200
+              protocol: TCP
+            - name: cluster
+              containerPort: 9200
+              protocol: TCP
+
+          resources:
+            limits:
+              memory: 600Mi
+              cpu: 0.7
+
+            requests:
+              memory: 500Mi
+              cpu: 0.2
+
+          volumeMounts:
+            - name: storage
+              mountPath: /usr/share/elasticsearch/data
