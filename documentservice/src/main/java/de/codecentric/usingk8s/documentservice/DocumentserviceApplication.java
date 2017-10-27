@@ -8,7 +8,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 @EnableElasticsearchRepositories
 public class DocumentserviceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DocumentserviceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(DocumentserviceApplication.class, args);
+    }
 }

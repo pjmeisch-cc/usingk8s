@@ -42,7 +42,6 @@
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
-            <version>5.5.0</version>
         </dependency>
 
 		<dependency>
@@ -59,12 +58,18 @@
 
 	<repositories>
 		<repository>
-			<!--needed for ES 5-->
-			<id>spring-libs-snapshot</id>
-			<name>Spring Snapshot Repository</name>
-			<url>http://repo.spring.io/libs-snapshot</url>
+			<id>spring-libs-milestones</id>
+			<name>Spring Milestones Repository</name>
+			<url>http://repo.spring.io/milestone</url>
 		</repository>
 	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-libs-milestones</id>
+			<name>Spring Milestones Repository</name>
+			<url>http://repo.spring.io/milestone</url>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<build>
 		<plugins>
