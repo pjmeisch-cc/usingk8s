@@ -4,6 +4,8 @@
 package de.codecentric.usingk8s.documentservice;
 
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,41 +15,66 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.text.MessageFormat;
+import java.util.Collection;
+
 /**
  * @author P.J. Meisch (peter-josef.meisch@codecentric.de)
  */
 @RestController
 public class DocumentserviceController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DocumentserviceController.class);
+
     private final DocumentDataRepository repository;
+    private String hostName;
 
     @Autowired
     public DocumentserviceController(DocumentDataRepository repository) {
         this.repository = repository;
+        try {
+            hostName = InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
+            LOGGER.warn("cannot get hostname");
+            hostName = "unknown host";
+        }
+
     }
 
     @NotNull
     @PostMapping("/document")
-    public ResponseEntity<DocumentData> save(@NotNull @RequestBody DocumentData documentData) {
-        return new ResponseEntity<>(repository.save(documentData), HttpStatus.OK);
+    public ResponseEntity<DocumentserviceResponse> save(@NotNull @RequestBody DocumentData documentData,
+                                                        @RequestParam(value = "via", required = false) String via) {
+        return new ResponseEntity<>(
+                new DocumentserviceResponse(buildProcessMessage(via), repository.save(documentData)), HttpStatus.OK);
     }
 
     @NotNull
     @GetMapping("/documents")
-    public ResponseEntity<Iterable<DocumentData>> list() {
-        return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
+    public ResponseEntity<DocumentserviceResponse> list(@RequestParam(value = "via", required = false) String via) {
+        return new ResponseEntity<>(new DocumentserviceResponse(buildProcessMessage(via), repository.findAll()),
+                HttpStatus.OK);
     }
 
     @NotNull
     @PostMapping("/documents/clear")
-    public ResponseEntity clear() {
+    public ResponseEntity<DocumentserviceResponse> clear(@RequestParam(value = "via", required = false) String via) {
         repository.deleteAll();
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(new DocumentserviceResponse(buildProcessMessage(via)), HttpStatus.OK);
     }
 
     @NotNull
     @GetMapping("/document/search")
-    public ResponseEntity<Iterable<DocumentData>> search(@RequestParam("q") String s) {
-        return new ResponseEntity<>(repository.findByTitleContainingOrContentContaining(s, s), HttpStatus.OK);
+    public ResponseEntity<DocumentserviceResponse> search(@RequestParam("q") String s,
+                                                          @RequestParam(value = "via", required = false) String via) {
+        final Collection<DocumentData> documents = repository.findByTitleContainingOrContentContaining(s, s);
+        return new ResponseEntity<>(new DocumentserviceResponse(buildProcessMessage(via), documents), HttpStatus.OK);
+    }
+
+    @NotNull
+    private String buildProcessMessage(@RequestParam(value = "via", required = false) String via) {
+        return MessageFormat.format("processed on {0} via {1}", hostName, via == null ? "unknown host" : via);
     }
 }
