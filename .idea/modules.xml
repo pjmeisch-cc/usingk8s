@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/documentservice/documentservice.iml" filepath="$PROJECT_DIR$/documentservice/documentservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/documentui/documentui.iml" filepath="$PROJECT_DIR$/documentui/documentui.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/usingk8s.iml" filepath="$PROJECT_DIR$/.idea/usingk8s.iml" />
     </modules>
   </component>

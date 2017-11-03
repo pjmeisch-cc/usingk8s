@@ -73,7 +73,8 @@ spec:
   selector:
     app: documentservice
 
-  type: ClusterIP
+  type: LoadBalancer
+#  type: ClusterIP
 
   ports:
     - name: api
