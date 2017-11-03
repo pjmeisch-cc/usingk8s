@@ -37,14 +37,3 @@ das Kubernetes dashboard im Browser angezeigt. Alternativ kann auch der konventi
      
 gemacht werden, so dass dan über http://localhost:8001/ui das Dashboard zur Verfügung steht.   
 
-## notwendige Anpassungen
-
-damit Elasticsearch im Cluster läuft ist eine wichtige Anpassung der Systemeinstellung `vm.max_map_count` notwendig, siehe auch die [Elasticsearch Dokumentation](https://www.elastic.co/guide/en/elasticsearch/reference/5.6/docker.html).
-
-Für minikube geht das, indem man sich in die virtuelle Maschine einloggt und die Systemkonfiguration anpasst:
-
-    minikube ssh
-    sudo sysctl -w vm.max_map_count=262144
-    exit
-
-Nach `minikube stop` and `minikube start` muss der Wert erneut eingetragen werden. 
