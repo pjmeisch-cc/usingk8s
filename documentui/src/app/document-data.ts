@@ -19,7 +19,7 @@ export class DocumentData {
     this._content = value;
   }
 
-  public toString() {
+  toString() {
     let stripped = this._content;
     if (this._content) {
       stripped = this._content.substr(0, 10);
@@ -28,7 +28,11 @@ export class DocumentData {
     return `DocumentData (title: ${this._title}, content: ${stripped})`;
   }
 
-  public isValid() {
-    return this._title && this._content;
+  /**
+   * checks wether title and content are defined.
+   * @returns {boolean}
+   */
+  isValid(): boolean {
+    return !(!this.title || !this.content);
   }
 }

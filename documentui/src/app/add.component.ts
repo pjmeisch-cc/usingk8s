@@ -11,7 +11,7 @@ import {DocumentDataService} from './document-data.service';
 })
 
 export class AddComponent {
-  public constructor(private documentDataService: DocumentDataService) {
+  constructor(private documentDataService: DocumentDataService) {
   }
 
   /** for databinding to the form */
@@ -24,7 +24,7 @@ export class AddComponent {
   /**
    * adds the document with the form data to the service if the data is valid.
    */
-  public onAddDocument() {
+   onAddDocument() {
     if (this._documentData.isValid()) {
       console.log('should add ' + this._documentData);
       this.documentDataService.add(this._documentData);
