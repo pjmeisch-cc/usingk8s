@@ -7,6 +7,10 @@ import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/filter';
 
+export interface MessageListener {
+  onMessage(msg: string);
+}
+
 /**
  * service to access the backend API server.
  */
@@ -15,9 +19,15 @@ export class DocumentDataService {
   // mock implementation
   private documentDatas: DocumentData[];
 
+  private messageListeners: MessageListener[];
 
   constructor() {
     this.documentDatas = [];
+    this.messageListeners = [];
+  }
+
+  addMessageListener(listener: MessageListener) {
+    this.messageListeners.push(listener);
   }
 
   /**
@@ -25,7 +35,7 @@ export class DocumentDataService {
    * @returns {Observable<DocumentData[]>}
    */
   all(): Observable<DocumentData[]> {
-    console.log('returning all data, ' + this.documentDatas.length);
+    this.sendMessage('returning all data, ' + this.documentDatas.length);
     return Observable.of(this.documentDatas);
   }
 
@@ -37,6 +47,7 @@ export class DocumentDataService {
     let number = this.documentDatas.length + 1;
     documentData.id = number.toString();
     this.documentDatas.push(documentData);
+    this.sendMessage('added document ' + documentData.id);
   }
 
   /**
@@ -48,5 +59,9 @@ export class DocumentDataService {
     return this.all()
       .switchMap((docArray: DocumentData[]) => Observable.from(docArray))
       .filter(doc => doc.id === id);
+  }
+
+  private sendMessage(msg: string) {
+    this.messageListeners.forEach(listener => listener.onMessage(msg));
   }
 }

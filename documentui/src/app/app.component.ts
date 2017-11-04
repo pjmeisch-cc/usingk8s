@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {DocumentDataService} from './document-data.service';
+import {DocumentDataService, MessageListener} from './document-data.service';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +8,23 @@ import {DocumentDataService} from './document-data.service';
   providers: [DocumentDataService]
 })
 
-export class AppComponent {
+export class AppComponent implements MessageListener {
+  constructor(private documentDataService: DocumentDataService) {
+    documentDataService.addMessageListener(this);
+  }
+
+  private _footerMessage: string;
+
+  get footerMessage(): string {
+    return this._footerMessage;
+  }
+
+  set footerMessage(value: string) {
+    this._footerMessage = value;
+  }
+
+  onMessage(msg: string) {
+    this.footerMessage = msg;
+  }
+
 }
