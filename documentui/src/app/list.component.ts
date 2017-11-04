@@ -20,7 +20,7 @@ export class ListComponent implements OnInit {
 
   ngOnInit(): void {
     this.documentDataService.all()
-      .then(documentDatas => {
+      .subscribe(documentDatas => {
         this._documentDatas = documentDatas;
         console.log('got ' + this.documentDatas.length + ' elements');
       });

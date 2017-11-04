@@ -1,10 +1,16 @@
 import {Injectable} from '@angular/core';
 import {DocumentData} from './document-data';
+import {Observable} from 'rxjs/Observable';
 
-@Injectable()
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/from';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/filter';
+
 /**
  * service to access the backend API server.
  */
+@Injectable()
 export class DocumentDataService {
   // mock implementation
   private documentDatas: DocumentData[];
@@ -16,11 +22,11 @@ export class DocumentDataService {
 
   /**
    * get all documents from the API server.
-   * @returns {DocumentData[]}
+   * @returns {Observable<DocumentData[]>}
    */
-  all(): Promise<DocumentData[]> {
+  all(): Observable<DocumentData[]> {
     console.log('returning all data, ' + this.documentDatas.length);
-    return Promise.resolve(this.documentDatas);
+    return Observable.of(this.documentDatas);
   }
 
   /**
@@ -36,9 +42,11 @@ export class DocumentDataService {
   /**
    * get a DocumentData with a given id
    * @param {string} id
-   * @returns {Promise<DocumentData>}
+   * @returns {Observable<DocumentData>}
    */
-  get(id: string): Promise<DocumentData> {
-    return this.all().then(docs => docs.find(doc => doc.id === id));
+  get(id: string): Observable<DocumentData> {
+    return this.all()
+      .switchMap((docArray: DocumentData[]) => Observable.from(docArray))
+      .filter(doc => doc.id === id);
   }
 }
