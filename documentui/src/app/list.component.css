@@ -8,3 +8,8 @@
   font-size: larger;
   font-weight: bold;
 }
+
+.document-data a {
+  text-decoration: none;
+  color: black;
+}

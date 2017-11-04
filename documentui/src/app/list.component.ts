@@ -19,7 +19,10 @@ export class ListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._documentDatas = this.documentDataService.all();
-    console.log('got ' + this.documentDatas.length + ' elements');
+    this.documentDataService.all()
+      .then(documentDatas => {
+        this._documentDatas = documentDatas;
+        console.log('got ' + this.documentDatas.length + ' elements');
+      });
   }
 }

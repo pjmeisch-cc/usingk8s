@@ -12,6 +12,7 @@ import {AddComponent} from './add.component';
 const appRoutes: Routes = [
   {path: 'list', component: ListComponent},
   {path: 'detail', component: DetailComponent},
+  {path: 'detail/:id', component: DetailComponent},
   {path: 'add', component: AddComponent},
   {path: '**', redirectTo: '/list', pathMatch: 'full'}
 ];

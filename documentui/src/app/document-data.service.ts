@@ -18,9 +18,9 @@ export class DocumentDataService {
    * get all documents from the API server.
    * @returns {DocumentData[]}
    */
-  all(): DocumentData[] {
+  all(): Promise<DocumentData[]> {
     console.log('returning all data, ' + this.documentDatas.length);
-    return this.documentDatas;
+    return Promise.resolve(this.documentDatas);
   }
 
   /**
@@ -28,7 +28,17 @@ export class DocumentDataService {
    * @param documentData
    */
   add(documentData: DocumentData) {
+    let number = this.documentDatas.length + 1;
+    documentData.id = number.toString();
     this.documentDatas.push(documentData);
   }
 
+  /**
+   * get a DocumentData with a given id
+   * @param {string} id
+   * @returns {Promise<DocumentData>}
+   */
+  get(id: string): Promise<DocumentData> {
+    return this.all().then(docs => docs.find(doc => doc.id === id));
+  }
 }
