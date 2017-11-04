@@ -19,6 +19,7 @@ export class DocumentDataService {
    * @returns {DocumentData[]}
    */
   all(): DocumentData[] {
+    console.log('returning all data, ' + this.documentDatas.length);
     return this.documentDatas;
   }
 

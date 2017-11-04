@@ -6,8 +6,7 @@ import {DocumentDataService} from './document-data.service';
 @Component({
   selector: 'app-add-component',
   templateUrl: './add.component.html',
-  styleUrls: ['./add.component.css'],
-  providers: [DocumentDataService]
+  styleUrls: ['./add.component.css']
 })
 
 export class AddComponent {
@@ -24,12 +23,11 @@ export class AddComponent {
   /**
    * adds the document with the form data to the service if the data is valid.
    */
-   onAddDocument() {
+  onAddDocument() {
     if (this._documentData.isValid()) {
       console.log('should add ' + this._documentData);
       this.documentDataService.add(this._documentData);
-
-      console.log(this.documentDataService.all());
+      this._documentData = new DocumentData();
     } else {
       console.log('no valid input data to add');
     }

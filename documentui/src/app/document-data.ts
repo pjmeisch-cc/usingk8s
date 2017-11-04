@@ -1,4 +1,14 @@
 export class DocumentData {
+  private _id: string;
+
+  get id(): string {
+    return this._id;
+  }
+
+  set id(value: string) {
+    this._id = value;
+  }
+
   private _title: string;
 
   get title(): string {

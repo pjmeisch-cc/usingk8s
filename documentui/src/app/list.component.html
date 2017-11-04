@@ -1,3 +1,10 @@
 <div>
-  Liste
+  <h3>Dokumente</h3>
+    <div *ngFor="let doc of documentDatas">
+      <div class="document-data">
+        <div class="title">{{doc.title}}</div>
+        <div class="content">{{doc.content.substr(0, 200)}}</div>
+      </div>
+
+    </div>
 </div>
