@@ -6,22 +6,21 @@ import {FormsModule} from '@angular/forms';
 
 // this application's components
 import {AppComponent} from './app.component';
-import {SearchComponent} from './search.component';
+import {ListComponent} from './list.component';
 import {DetailComponent} from './detail.component';
 import {AddComponent} from './add.component';
 
 const appRoutes: Routes = [
-  {path: 'search', component: SearchComponent},
+  {path: 'list', component: ListComponent},
   {path: 'detail', component: DetailComponent},
   {path: 'add', component: AddComponent},
-  {path: '', redirectTo: '/search', pathMatch: 'full'},
-  {path: '**', redirectTo: '/search', pathMatch: 'full'}
+  {path: '**', redirectTo: '/list', pathMatch: 'full'}
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    SearchComponent,
+    ListComponent,
     DetailComponent,
     AddComponent
   ],
