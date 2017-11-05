@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 
-import {DocumentData} from './document-data';
-import {DocumentDataService} from './document-data.service';
+import {DocumentData} from '../../data/document-data';
+import {DocumentDataService} from '../../services/document-data.service';
 
 @Component({
   selector: 'app-add-component',

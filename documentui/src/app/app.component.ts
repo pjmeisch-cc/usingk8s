@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {DocumentDataService, MessageListener} from './document-data.service';
+import {DocumentDataService, MessageListener} from './services/document-data.service';
 
 @Component({
   selector: 'app-root',

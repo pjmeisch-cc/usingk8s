@@ -5,9 +5,9 @@ import {RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 // this application's components
 import {AppComponent} from './app.component';
-import {ListComponent} from './list.component';
-import {DetailComponent} from './detail.component';
-import {AddComponent} from './add.component';
+import {ListComponent} from './documents/list/list.component';
+import {DetailComponent} from './documents/details/detail.component';
+import {AddComponent} from './documents/add/add.component';
 
 const appRoutes: Routes = [
   {path: 'list', component: ListComponent},

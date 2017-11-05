@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
-import {DocumentDataService} from './document-data.service';
+import {DocumentDataService} from '../../services/document-data.service';
 
-import {DocumentData} from './document-data';
+import {DocumentData} from '../../data/document-data';
 
 import 'rxjs/add/operator/switchMap';
 
