@@ -61,6 +61,17 @@ export class DocumentDataService {
       .filter(doc => doc.id === id);
   }
 
+  /**
+   * returns all the documents that match a given filter
+   * @param filter
+   * @returns {Observable<T>}
+   */
+  filter(filter: string): Observable<DocumentData> {
+    return this.all()
+      .switchMap((docArray: DocumentData[]) => Observable.from(docArray))
+      .filter(doc => doc.title.includes(filter) || doc.content.includes(filter));
+  }
+
   private sendMessage(msg: string) {
     this.messageListeners.forEach(listener => listener.onMessage(msg));
   }
