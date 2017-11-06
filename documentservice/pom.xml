@@ -5,7 +5,7 @@
 
     <groupId>de.codecentric.usingk8s</groupId>
     <artifactId>documentservice</artifactId>
-    <version>0.0.1</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>documentservice</name>
@@ -99,6 +99,7 @@
                 </executions>
                 <configuration>
                     <repository>codecentric/${project.artifactId}</repository>
+                    <tag>${project.version}</tag>
                     <buildArgs>
                         <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>

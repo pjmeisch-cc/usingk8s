@@ -35,8 +35,7 @@ spec:
 
       containers:
         - name: documentservice
-          image: codecentric/documentservice:latest
-          imagePullPolicy: IfNotPresent
+          image: codecentric/documentservice:1.0
 
           env:
             - name: JAVA_OPTS
@@ -73,8 +72,8 @@ spec:
   selector:
     app: documentservice
 
-  type: LoadBalancer
-#  type: ClusterIP
+#  type: LoadBalancer
+  type: ClusterIP
 
   ports:
     - name: api

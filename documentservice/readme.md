@@ -1,6 +1,6 @@
 # DocumentService
 
-A Spring Boot appliaction with the _web, actuator_ and _elasticsearch_ components. 
+A Spring Boot application with the _web, actuator_ and _elasticsearch_ components. 
 
 ## Docker image
 
