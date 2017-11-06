@@ -49,7 +49,8 @@ public class DocumentserviceController {
     public ResponseEntity<DocumentserviceResponse> save(@NotNull @RequestBody DocumentData document,
                                                         @RequestParam(value = "via", required = false) String via) {
         final DocumentData savedDocument = repository.save(document);
-        return new ResponseEntity<>(new DocumentserviceResponse(buildMessage(via), savedDocument), HttpStatus.OK);
+        return new ResponseEntity<>(new DocumentserviceResponse(buildMessage(via), false, savedDocument),
+                HttpStatus.OK);
     }
 
     @NotNull
@@ -57,7 +58,7 @@ public class DocumentserviceController {
     public ResponseEntity<DocumentserviceResponse> findById(@NotNull @PathVariable("id") String id,
                                                             @RequestParam(value = "via", required = false) String via) {
         return repository.findById(id)
-                .map(document -> new ResponseEntity<>(new DocumentserviceResponse(buildMessage(via), document),
+                .map(document -> new ResponseEntity<>(new DocumentserviceResponse(buildMessage(via), false, document),
                         HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
@@ -65,23 +66,26 @@ public class DocumentserviceController {
     @NotNull
     @GetMapping("/document/search")
     public ResponseEntity<DocumentserviceResponse> search(@RequestParam("q") String s,
+                                                          @RequestParam(value = "trim", required = false, defaultValue = "false") Boolean trim,
                                                           @RequestParam(value = "via", required = false) String via) {
         final Collection<DocumentData> documents = repository.findByTitleContainingOrContentContaining(s, s);
-        return new ResponseEntity<>(new DocumentserviceResponse(buildMessage(via), documents), HttpStatus.OK);
+        return new ResponseEntity<>(new DocumentserviceResponse(buildMessage(via), trim, documents), HttpStatus.OK);
     }
 
     @NotNull
     @GetMapping("/documents")
-    public ResponseEntity<DocumentserviceResponse> list(@RequestParam(value = "via", required = false) String via) {
+    public ResponseEntity<DocumentserviceResponse> list(
+            @RequestParam(value = "trim", required = false, defaultValue = "false") Boolean trim,
+            @RequestParam(value = "via", required = false) String via) {
         final Iterable<DocumentData> documents = repository.findAll();
-        return new ResponseEntity<>(new DocumentserviceResponse(buildMessage(via), documents), HttpStatus.OK);
+        return new ResponseEntity<>(new DocumentserviceResponse(buildMessage(via), trim, documents), HttpStatus.OK);
     }
 
     @NotNull
     @PostMapping("/documents/clear")
     public ResponseEntity<DocumentserviceResponse> clear(@RequestParam(value = "via", required = false) String via) {
         repository.deleteAll();
-        return new ResponseEntity<>(new DocumentserviceResponse(buildMessage(via)), HttpStatus.OK);
+        return new ResponseEntity<>(new DocumentserviceResponse(buildMessage(via), false), HttpStatus.OK);
     }
 
     @NotNull

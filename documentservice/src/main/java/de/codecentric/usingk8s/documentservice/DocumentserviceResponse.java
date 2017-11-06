@@ -17,17 +17,29 @@ public class DocumentserviceResponse {
     private final List<DocumentData> documents = new ArrayList<>();
     private final String message;
 
-    public DocumentserviceResponse(String message, @NotNull Iterable<DocumentData> documentDatas) {
+    public DocumentserviceResponse(String message, @NotNull Boolean trim,
+                                   @NotNull Iterable<DocumentData> documentDatas) {
         this.message = message;
         StreamSupport.stream(documentDatas.spliterator(), false)
+                .peek(documentData -> trimDocumentDataContent(trim, documentData))
                 .forEach(documents::add);
 
     }
 
-    public DocumentserviceResponse(@NotNull String message, DocumentData... documentsArg) {
+    public DocumentserviceResponse(@NotNull String message, @NotNull Boolean trim, DocumentData... documentsArg) {
         this.message = message;
         if (documentsArg != null) {
+            for (DocumentData documentData : documentsArg) {
+                trimDocumentDataContent(trim, documentData);
+            }
             Collections.addAll(documents, documentsArg);
+        }
+    }
+
+    private void trimDocumentDataContent(@NotNull Boolean trim, DocumentData documentData) {
+        final String content = documentData.getContent();
+        if (trim && null != content && content.length() > 250) {
+            documentData.setContent(content.substring(0, 250));
         }
     }
 

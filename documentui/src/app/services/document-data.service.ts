@@ -38,7 +38,7 @@ export class DocumentDataService {
    * @returns {Observable<DocumentData[]>}
    */
   all(): Observable<DocumentData> {
-    return this.getForUrl('/api/documents');
+    return this.getForUrl('/api/documents?trim=true');
   }
 
   /**
