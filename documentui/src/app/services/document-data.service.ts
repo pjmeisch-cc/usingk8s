@@ -1,11 +1,17 @@
 import {Injectable} from '@angular/core';
-import {DocumentData} from '../data/document-data';
+import {HttpClient} from '@angular/common/http';
+
 import {Observable} from 'rxjs/Observable';
+
+import {DocumentData} from '../data/document-data';
+import {ApiResponseData} from '../data/api-response-data';
 
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/from';
+import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/first';
 
 export interface MessageListener {
   onMessage(msg: string);
@@ -16,13 +22,10 @@ export interface MessageListener {
  */
 @Injectable()
 export class DocumentDataService {
-  // mock implementation
-  private documentDatas: DocumentData[];
 
   private messageListeners: MessageListener[];
 
-  constructor() {
-    this.documentDatas = [];
+  constructor(private http: HttpClient) {
     this.messageListeners = [];
   }
 
@@ -34,9 +37,8 @@ export class DocumentDataService {
    * get all documents from the API server.
    * @returns {Observable<DocumentData[]>}
    */
-  all(): Observable<DocumentData[]> {
-    this.sendMessage('returning all data, ' + this.documentDatas.length);
-    return Observable.of(this.documentDatas);
+  all(): Observable<DocumentData> {
+    return this.getForUrl('/api/documents');
   }
 
   /**
@@ -44,10 +46,12 @@ export class DocumentDataService {
    * @param documentData
    */
   add(documentData: DocumentData) {
-    let number = this.documentDatas.length + 1;
-    documentData.id = number.toString();
-    this.documentDatas.push(documentData);
-    this.sendMessage('added document ' + documentData.id);
+    console.log('adding');
+    console.log(documentData);
+    // noinspection JSIgnoredPromiseFromCall
+    this.http.post<ApiResponseData>('/api/document', documentData)
+      .forEach((apiResponseData: ApiResponseData) =>
+        this.sendMessage(apiResponseData.message));
   }
 
   /**
@@ -56,9 +60,7 @@ export class DocumentDataService {
    * @returns {Observable<DocumentData>}
    */
   get(id: string): Observable<DocumentData> {
-    return this.all()
-      .switchMap((docArray: DocumentData[]) => Observable.from(docArray))
-      .filter(doc => doc.id === id);
+    return this.getForUrl('/api/document/find/' + id).first();
   }
 
   /**
@@ -67,9 +69,20 @@ export class DocumentDataService {
    * @returns {Observable<T>}
    */
   filter(filter: string): Observable<DocumentData> {
-    return this.all()
-      .switchMap((docArray: DocumentData[]) => Observable.from(docArray))
-      .filter(doc => doc.title.includes(filter) || doc.content.includes(filter));
+    return this.getForUrl('/api/document/search?q=' + encodeURI(filter));
+  }
+
+  private getForUrl(url: string): Observable<DocumentData> {
+    return this.http.get<ApiResponseData>(url)
+      .switchMap((apiResponseData: ApiResponseData) => {
+        this.sendMessage(apiResponseData.message);
+        return Observable.from(apiResponseData.documents)
+          // explicitly create an object so it has the isValid() method
+          .map(doc =>
+            new DocumentData(doc.title, doc.content, doc.id)
+      )
+        ;
+      });
   }
 
   private sendMessage(msg: string) {

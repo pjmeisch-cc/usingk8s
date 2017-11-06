@@ -5,7 +5,7 @@ import {DocumentDataService} from '../../services/document-data.service';
 
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
-import {FormControl} from "@angular/forms";
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-list-component',
@@ -30,7 +30,7 @@ export class ListComponent implements OnInit {
       .subscribe(doc => this._documentDatas.push(doc));
   }
 
-  private _documentDatas: DocumentData[];
+  private _documentDatas: DocumentData[] = [];
 
   get documentDatas(): DocumentData[] {
     return this._documentDatas;
@@ -38,9 +38,10 @@ export class ListComponent implements OnInit {
 
   ngOnInit(): void {
     this.documentDataService.all()
-      .subscribe(documentDatas => {
-        this._documentDatas = documentDatas;
-        console.log('got ' + this.documentDatas.length + ' elements');
+      .subscribe(doc => {
+        if (doc.isValid()) {
+          this._documentDatas.push(doc);
+        }
       });
   }
 }

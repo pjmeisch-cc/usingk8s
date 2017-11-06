@@ -1,41 +1,21 @@
 export class DocumentData {
-  private _id: string;
-
-  get id(): string {
-    return this._id;
+  constructor(title: string = '', content: string = '', id?: string) {
+    this.id = id;
+    this.title = title;
+    this.content = content;
   }
 
-  set id(value: string) {
-    this._id = value;
-  }
-
-  private _title: string;
-
-  get title(): string {
-    return this._title;
-  }
-
-  set title(value: string) {
-    this._title = value;
-  }
-
-  private _content: string;
-
-  get content(): string {
-    return this._content;
-  }
-
-  set content(value: string) {
-    this._content = value;
-  }
+  public id: string;
+  public title: string;
+  public content: string;
 
   toString() {
-    let stripped = this._content;
-    if (this._content) {
-      stripped = this._content.substr(0, 10);
+    let stripped = this.content;
+    if (this.content) {
+      stripped = this.content.substr(0, 10);
     }
 
-    return `DocumentData (title: ${this._title}, content: ${stripped})`;
+    return `DocumentData (title: ${this.title}, content: ${stripped})`;
   }
 
   /**
