@@ -66,7 +66,7 @@ export class DocumentDataService {
   /**
    * returns all the documents that match a given filter
    * @param filter
-   * @returns {Observable<T>}
+   * @returns {Observable<DocumentData>}
    */
   filter(filter: string): Observable<DocumentData> {
     return this.getForUrl('/api/document/search?q=' + encodeURI(filter));

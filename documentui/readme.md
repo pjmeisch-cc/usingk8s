@@ -1,18 +1,25 @@
 # DocumentUI
 
-An Angular based web application to be used as frontend for the DocumentService
+Eine Webanwendung basierend auf Angular als Frontend für den DocumentService. _node_ und _npm_ muss installiert sein.
 
 ## API access
 
-the ui access the API at /api/*. This must be routed to the API service by the processrunning the ui. 
+Die UI greift auf die API über /api/* zu. Dieser Zugriff muss an den API Server geroutet werden von dem Serverprozess, der die Anwendung ausliefert. 
 
-In production, this is implemented in the server.js file.
+Für den Produktivbetrieb ist das in der server.js implementiert.
 
-For development this is configured in proxy.conf.json and is used by
+Während der Entwicklung ist das in Datei _proxy.conf.json_ konfiguriert, und wird durch 
 
     npm start
     
-which effectivly calls
+verwendet; dies macht intern den Aufruf
     
     ng serve --proxy-config proxy.conf.json
     
+## Dockerimage
+
+Um das Dockerimage zu bauen mus zuerst die  Angular Anwendung gebaut werden:
+
+    ng build
+
+Dies erzeugt die Dateien in _docker _docker/dist_. 

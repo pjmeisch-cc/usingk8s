@@ -58,7 +58,7 @@ spec:
             - name: cluster.name
               value: "es-cluster"
             - name: ES_JAVA_OPTS
-              value: "-Xms512m -Xmx512m"
+              value: "-Xms300m -Xmx300m"
             - name: discovery.zen.ping.unicast.hosts
               value: "elasticsearch"
             - name: xpack.security.enabled
@@ -74,11 +74,11 @@ spec:
 
           resources:
             limits:
-              memory: 600Mi
-              cpu: 0.7
+              memory: 350Mi
+              cpu: 0.4
 
             requests:
-              memory: 500Mi
+              memory: 250Mi
               cpu: 0.2
 
           volumeMounts:

@@ -1,10 +1,11 @@
 # DocumentService
 
-A Spring Boot application with the _web, actuator_ and _elasticsearch_ components. 
+Eine Spring Boot Anwendung mit den _web, actuator_ and _elasticsearch_ Komponenten. 
 
-## Docker image
+## Dockerimage
 
-The docker environment must be set up. The maven command `mvn package` build the program and the docker image. The 
-image is named _codecentric/documentservice:VERSION_.
+Die Docker Umegbung muss eingerichtet sein (entweder ein lokaler docker Service oder entsprechend konfigurierte DOCKER_HOST Environment).
+
+Mit dem Kommando  `mvn package` wird die Anwendung gebaut und in ein Dockerimage gepackt. Das Image hat den Namen _codecentric/documentservice:VERSION_.
 
 
