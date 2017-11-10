@@ -69,7 +69,7 @@ export class DocumentDataService {
    * @returns {Observable<DocumentData>}
    */
   filter(filter: string): Observable<DocumentData> {
-    return this.getForUrl('/api/document/search?q=' + encodeURI(filter));
+    return this.getForUrl('/api/document/search?trim=true&q=' + encodeURI(filter));
   }
 
   private getForUrl(url: string): Observable<DocumentData> {

@@ -1,21 +1,21 @@
-var os = require('os');
-var hostname = os.hostname();
+let os = require('os');
+let hostname = os.hostname();
 console.log('running on ' + hostname);
 
 
-var path = require("path"),
+let path = require("path"),
     express = require("express");
 
-var DIST_DIR = path.join(__dirname, "dist"),
+let DIST_DIR = path.join(__dirname, "dist"),
     PORT = 3000,
     app = express();
 
 // logging
-var morgan = require('morgan');
+let morgan = require('morgan');
 app.use(morgan('combined'));
 
 // close connection to see loadbalancing
-var closeConnection = function (req, res, next) {
+let closeConnection = function (req, res, next) {
     res.setHeader('Connection', 'close'); next()
 };
 app.use('*', closeConnection);
@@ -26,14 +26,16 @@ app.use(express.static(DIST_DIR));
 
 // proxy all requests to /api to the service running on port 8080 (or whatever is given as environment or argument),
 // stripping the api part
-var requestProxy = require('express-request-proxy');
-var apiHost = process.argv[2] || process.env.API_HOST || 'localhost:8080';
-app.get('/api/*', requestProxy({
-    url: 'http://' + apiHost + '/*',
-    query: {
-        via: hostname
-    }
-}));
+let requestProxy = require('express-request-proxy');
+let apiHost = process.argv[2] || process.env.API_HOST || 'localhost:8080';
+let proxy = requestProxy({
+  url: 'http://' + apiHost + '/*',
+  query: {
+    via: hostname
+  }
+});
+app.get('/api/*', proxy);
+app.post('/api/*', proxy);
 
 
 //Send index.html when the user accesses anything

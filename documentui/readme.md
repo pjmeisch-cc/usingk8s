@@ -22,4 +22,8 @@ Um das Dockerimage zu bauen mus zuerst die  Angular Anwendung gebaut werden:
 
     ng build
 
-Dies erzeugt die Dateien in _docker _docker/dist_. 
+Dies erzeugt die Dateien in _docker/dist_. Das Image wird dann gebaut mit
+
+    cd docker
+    docker build -t codecentric/documentui:1.0 .
+     
