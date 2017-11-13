@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +17,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author P.J. Meisch (peter-josef.meisch@codecentric.de)
@@ -31,6 +38,9 @@ public class DocumentserviceController {
 
     private final DocumentDataRepository repository;
     private String hostName;
+
+    @Value("${documentservice.data.directory}")
+    private String dataDir;
 
     @Autowired
     public DocumentserviceController(DocumentDataRepository repository) {
@@ -86,6 +96,39 @@ public class DocumentserviceController {
     public ResponseEntity<DocumentserviceResponse> clear(@RequestParam(value = "via", required = false) String via) {
         repository.deleteAll();
         return new ResponseEntity<>(new DocumentserviceResponse(buildMessage(via), false), HttpStatus.OK);
+    }
+
+    @NotNull
+    @GetMapping("/documents/load")
+    public ResponseEntity<String> load() {
+
+        if (dataDir != null) {
+            repository.deleteAll();
+            LOGGER.info("trying to load data from {}", dataDir);
+            try (Stream<Path> paths = Files.walk(Paths.get(dataDir))) {
+                paths.filter(Files::isRegularFile)
+                        .forEach(path -> {
+                            try {
+                                final String content =
+                                        Files.readAllLines(path).stream().collect(Collectors.joining("\n"));
+
+                                DocumentData document = new DocumentData();
+                                document.setTitle(path.getFileName().toString());
+                                document.setContent(content);
+
+                                repository.save(document);
+                            } catch (IOException e) {
+                                LOGGER.warn(e.getClass().getCanonicalName() + ": " + e.getMessage());
+                            }
+                        });
+            } catch (Exception e) {
+                LOGGER.warn(e.getClass().getCanonicalName() + ": " + e.getMessage());
+            }
+
+        }
+
+        String msg = MessageFormat.format("{0} Datensätze geladen.", repository.count());
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     @NotNull
