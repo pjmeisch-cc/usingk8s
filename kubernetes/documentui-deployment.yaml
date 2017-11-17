@@ -1,23 +1,15 @@
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: config-documentui
-
-data:
-  apihost: documentservice:8080
-
----
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1beta2
 
 metadata:
   name: documentui
 
 spec:
   replicas: 1
-  revisionHistoryLimit: 3
 
+  selector:
+    matchLabels:
+      app: documentui
   template:
     metadata:
       labels:
@@ -27,7 +19,7 @@ spec:
 
       containers:
         - name: documentui
-          image: codecentric/documentui:1.0
+          image: sothawo/informatik-aktuell-usingk8s-documentui:1.0
 
           env:
             - name: API_HOST
@@ -43,28 +35,8 @@ spec:
 
           resources:
             limits:
-              memory: 1000Mi
-              cpu: 0.3
-
+              memory: 100Mi
+              cpu: 0.2
             requests:
               memory: 50Mi
-              cpu: 0.1
-
----
-kind: Service
-apiVersion: v1
-
-metadata:
-  name: documentui
-
-spec:
-  selector:
-    app: documentui
-
-  type: LoadBalancer
-
-  ports:
-    - name: api
-      port: 3000
-      targetPort: 3000
-
+              cpu: 0.05

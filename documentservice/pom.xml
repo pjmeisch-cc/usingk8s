@@ -98,7 +98,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <repository>codecentric/${project.artifactId}</repository>
+                    <repository>sothawo/informatik-aktuell-usingk8s-${project.artifactId}</repository>
                     <tag>${project.version}</tag>
                     <buildArgs>
                         <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>

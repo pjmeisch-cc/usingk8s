@@ -1,48 +1,21 @@
----
-kind: Service
-apiVersion: v1
-
-metadata:
-  name: elasticsearch
-
-spec:
-  selector:
-    app: elasticsearch
-
-  # headless service
-  type: ClusterIP
-  clusterIP: None
-
-  ports:
-    - name: api
-      port: 9200
-      targetPort: 9200
-    - name: cluster
-      port: 9300
-      targetPort: 9300
-
----
-
 kind: Deployment
-apiVersion: apps/v1beta1
+apiVersion: apps/v1beta2
 
 metadata:
   name: elasticsearch
 
 spec:
   replicas: 2
-  revisionHistoryLimit: 3
 
+  selector:
+    matchLabels:
+      app: elasticsearch
   template:
     metadata:
       labels:
         app: elasticsearch
 
     spec:
-      volumes:
-        - name: storage
-          emptyDir: {}
-
       initContainers:
         - name: sysctl-vm
           image: busybox
@@ -65,18 +38,14 @@ spec:
               value: "false"
 
           ports:
-            - name: api
-              containerPort: 9200
-              protocol: TCP
             - name: cluster
-              containerPort: 9200
+              containerPort: 9300
               protocol: TCP
 
           resources:
             limits:
               memory: 350Mi
               cpu: 0.4
-
             requests:
               memory: 250Mi
               cpu: 0.2
@@ -84,3 +53,7 @@ spec:
           volumeMounts:
             - name: storage
               mountPath: /usr/share/elasticsearch/data
+      volumes:
+        - name: storage
+          emptyDir: {}
+
