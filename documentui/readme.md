@@ -25,5 +25,5 @@ Um das Dockerimage zu bauen mus zuerst die  Angular Anwendung gebaut werden:
 Dies erzeugt die Dateien in _docker/dist_. Das Image wird dann gebaut mit
 
     cd docker
-    docker build -t sothawo/informatik-aktuell-usingk8s-document:1.0 .
+    docker build -t codecentric/informatik-aktuell-usingk8s-documentui:1.0 .
      

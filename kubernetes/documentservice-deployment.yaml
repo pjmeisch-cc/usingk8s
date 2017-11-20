@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: documentservice
-          image: sothawo/informatik-aktuell-usingk8s-documentservice:1.0
+          image: codecentric/informatik-aktuell-usingk8s-documentservice:1.0
 
           env:
             - name: JAVA_OPTS

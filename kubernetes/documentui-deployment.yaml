@@ -19,7 +19,7 @@ spec:
 
       containers:
         - name: documentui
-          image: sothawo/informatik-aktuell-usingk8s-documentui:1.0
+          image: codecentric/informatik-aktuell-usingk8s-documentui:1.0
 
           env:
             - name: API_HOST

@@ -1,4 +1,4 @@
-FROM node:9.1.0
+FROM node:9.2.0-slim
 
 #base image has user named node
 
